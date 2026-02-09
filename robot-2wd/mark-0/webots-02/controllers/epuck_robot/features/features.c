@@ -1,8 +1,9 @@
 #include "features.h"
 
+#include <stdbool.h>
+
 #include <webots/device.h>
 #include <webots/led.h>
-#include <webots/motor.h>
 #include <webots/robot.h>
 
 // ============== Output Implementation ==============
@@ -73,6 +74,20 @@ static void blink_leds()
 // Audio
 void audio_init(void)
 {
+    void reset_actuator_values(void)
+    {
+        for (int i = 0; i < LEDS_NUMBER; i++)
+            leds_set(i, 0);
+    }
+
+    void blink_leds(void)
+    {
+        static int counter = 0;
+        int led = (counter / 10) % LEDS_NUMBER;
+        for (int i = 0; i < LEDS_NUMBER; i++)
+            leds_set(i, i == led ? 1 : 0);
+        counter++;
+    }
     // Initialize audio
 }
 
@@ -113,40 +128,6 @@ void bluetooth_cleanup(void)
     // Cleanup Bluetooth communication
 }
 
-// ============== Locomotion Implementation ==============
-
-#define LEFT 0
-#define RIGHT 1
-#define MAX_SPEED 6.28
-
-static WbDeviceTag left_motor, right_motor;
-static double motor_speeds[2] = {0.0, 0.0};
-
-void locomotion_init(void)
-{
-    left_motor = wb_robot_get_device("left wheel motor");
-    right_motor = wb_robot_get_device("right wheel motor");
-    motor_speeds[LEFT] = 0.0;
-    motor_speeds[RIGHT] = 0.0;
-}
-
-void locomotion_set_velocity(double left_speed, double right_speed)
-{
-    motor_speeds[LEFT] = left_speed;
-    motor_speeds[RIGHT] = right_speed;
-}
-
-void locomotion_update(void)
-{
-    wb_motor_set_velocity(left_motor, motor_speeds[LEFT]);
-    wb_motor_set_velocity(right_motor, motor_speeds[RIGHT]);
-}
-
-void locomotion_cleanup(void)
-{
-    // Cleanup locomotion
-}
-
 // ============== Features Control Hub ==============
 
 void features_init(void)
@@ -155,7 +136,6 @@ void features_init(void)
     leds_init();
     audio_init();
     bluetooth_init();
-    locomotion_init();
 }
 
 void features_update(void)
@@ -163,7 +143,6 @@ void features_update(void)
     actuators_update();
     leds_update();
     bluetooth_receive();
-    locomotion_update();
 }
 
 void features_cleanup(void)
@@ -172,5 +151,4 @@ void features_cleanup(void)
     leds_cleanup();
     audio_cleanup();
     bluetooth_cleanup();
-    locomotion_cleanup();
 }

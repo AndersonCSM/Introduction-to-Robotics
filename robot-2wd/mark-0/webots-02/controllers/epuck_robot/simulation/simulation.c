@@ -1,3 +1,6 @@
+// bibliotecas do c
+#include <stdlib.h>
+
 // bibliotecas do simulador
 #include <webots/device.h>
 #include <webots/distance_sensor.h>
@@ -5,9 +8,6 @@
 #include <webots/motor.h>
 #include <webots/nodes.h>
 #include <webots/robot.h>
-
-// bibliotecas do c
-#include <stdlib.h>
 
 int simulation_get_time_step()
 {
@@ -35,7 +35,8 @@ void passive_wait(double sec)
     } while (start_time + sec > wb_robot_get_time());
 }
 
-void simulation_init(){
+void simulation_init()
+{
     wb_robot_init();
 }
 

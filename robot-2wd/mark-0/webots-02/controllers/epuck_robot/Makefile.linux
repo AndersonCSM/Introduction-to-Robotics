@@ -1,23 +1,25 @@
-CC := g++
+CC := gcc
 TARGET := epuck_robot
 
 SRC := \
-  main.cpp \
-  control.cpp \
-  datapath.cpp \
-  simulation/simulation.cpp \
-  features/features.cpp \
-  sensors/sensors.cpp \
-  sensors/environmental.cpp \
-  sensors/motion.cpp
+  main.c \
+  cpu/control.c \
+  cpu/datapath.c \
+  cpu/cpu.c \
+  simulation/simulation.c \
+  features/features.c \
+  locomotion/locomotion.c \
+  sensors/sensors.c \
+  sensors/environmental.c \
+  sensors/motion.c
 
-OBJ := $(SRC:.cpp=.o)
+OBJ := $(SRC:.c=.o)
 
 WEBOTS_HOME ?= /usr/local/webots
 WEBOTS_INCLUDE := $(WEBOTS_HOME)/include/controller/c
 WEBOTS_LIB := $(WEBOTS_HOME)/lib/controller
 
-CFLAGS := -std=c++17 -Wall -Wextra -Iinclude -I$(WEBOTS_INCLUDE)
+CFLAGS := -std=c11 -Wall -Wextra -Iinclude -I$(WEBOTS_INCLUDE)
 LDFLAGS := -L$(WEBOTS_LIB) -lController
 
 all: $(TARGET)
@@ -25,7 +27,7 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
-%.o: %.cpp
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(TARGET)

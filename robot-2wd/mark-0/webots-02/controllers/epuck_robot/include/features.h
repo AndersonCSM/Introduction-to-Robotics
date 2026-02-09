@@ -15,6 +15,8 @@ void leds_init(void);
 void leds_set(int led_id, int state);
 void leds_update(void);
 void leds_cleanup(void);
+void reset_actuator_values(void);
+void blink_leds(void);
 
 // Audio
 void audio_init(void);
@@ -27,12 +29,6 @@ void bluetooth_init(void);
 void bluetooth_send(const char *data);
 void bluetooth_receive(void);
 void bluetooth_cleanup(void);
-
-// ============== Locomotion Features ==============
-void locomotion_init(void);
-void locomotion_set_velocity(double left_speed, double right_speed);
-void locomotion_update(void);
-void locomotion_cleanup(void);
 
 // ============== Features Control Hub ==============
 void features_init(void);
