@@ -1,4 +1,3 @@
-
 #include "datapath.h"
 
 void datapath_init(void)

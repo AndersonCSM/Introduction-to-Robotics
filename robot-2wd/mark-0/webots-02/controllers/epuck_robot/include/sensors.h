@@ -62,8 +62,34 @@ void ground_update(void);
 void ground_cleanup(void);
 
 // --- Sensores utilitários ---
-void get_sensor_input(void);
 int cliff_detected(void);
+
+// ============== Encapsulated Data Accessors ==============
+/**
+ * @brief Retorna ponteiro ao buffer encapsulado de valores de distância
+ *
+ * Fornece acesso seguro ao buffer interno de sensores de distância.
+ * O buffer é mantido em motion.c e só existe se SENSOR_DISTANCE foi
+ * inicializado via sensors_init().
+ *
+ * @return Ponteiro para array[8] com valores dos 8 sensores (0.0-1.0)
+ *
+ * @see distance_get_values() implementado em motion.c
+ */
+double *distance_get_values(void);
+
+/**
+ * @brief Retorna ponteiro ao buffer encapsulado de valores de chão
+ *
+ * Fornece acesso seguro ao buffer interno de sensores de chão.
+ * O buffer é mantido em environmental.c e só existe se SENSOR_GROUND
+ * foi inicializado via sensors_init().
+ *
+ * @return Ponteiro para array[3] com valores dos 3 sensores (0-1000+)
+ *
+ * @see ground_get_values() implementado em environmental.c
+ */
+double *ground_get_values(void);
 
 // ============== Sensors Control Hub ==============
 /**
@@ -73,7 +99,7 @@ int cliff_detected(void);
  * os sensores correspondentes aos bits ativos (1).
  *
  * Exemplo de uso:
- * @code
+ *
  * // Inicializa apenas o sensor de distância
  * sensors_init(SENSOR_DISTANCE);
  *
@@ -85,7 +111,7 @@ int cliff_detected(void);
  *
  * // Inicializa distância e infravermelho (notação binária)
  * sensors_init(0b00000011);
- * @endcode
+ *
  *
  * @param sensors_mask Máscara de bits que define quais sensores serão inicializados.
  */
